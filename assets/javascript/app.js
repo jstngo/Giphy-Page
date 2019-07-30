@@ -1,4 +1,4 @@
-var pokemon = ["Abra", "Bulbasaur", "Charmander", "Diglet", "Eevee", "Fennekin", "Geodude", "Hitmonlee", "Ivysaur", "Jigglypuff", "Koffee", "Lapras", "Mr. Mime", "Nidoran", "Onyx", "Pikachu"];
+var pokemon = ["Abra", "Bulbasaur", "Charmander", "Diglet", "Eevee", "Fennekin", "Geodude", "Hitmonlee", "Ivysaur", "Jigglypuff", "Koffee", "Lapras", "Mr. Mime", "Nidoran", "Onyx", "Pikachu", "Snorlax", "Mew", "Ditto", "Squirtle", "Dragonite", "Zapdos", "Meowth", "Psyduck", "Gengar", "Vaporeon"];
 console.log(pokemon);
 function renderButtons() {
     $('#buttons-view').empty();
@@ -19,23 +19,35 @@ function createButton(gName) {
 $(document).on('click', 'button', function () {
     var gifName = $(this).text();
 
-    var u = "https://api.giphy.com/v1/gifs/search?api_key=fqydCqSaHCiqVBtd38IfSjDm4vi4vSsI&q=" + gifName + "&limit=25&offset=0&rating=G&lang=en";
-    $('.col-9').empty();
+    var u = "https://api.giphy.com/v1/gifs/search?api_key=fqydCqSaHCiqVBtd38IfSjDm4vi4vSsI&q=" + gifName + "&limit=25&offset=0&rating=PG-13&lang=en";
+
+    $('.col-10').empty();
+    
     $.ajax({
         url: u,
         method: 'GET'
     }).then(function (response) {
 
         for (var j = 0; j < 10; j++) {
-            var pokeGif = $('<img>').attr('src', response.data[j].images.fixed_height_downsampled.url);
 
-            var p = $('<div>').html(pokeGif);
-            console.log(p);
+            var pokeStill = $('<img>').attr('src', response.data[j].images.fixed_height_small_still.url);
+
+            // var pokeGif = $('<img>').attr('src', response.data[j].images.fixed_height_small.url);
+
+            var pokeRating = $('<span>').text(response.data[j].rating);
             
-            $('.col-9').append(p);
+            $('.col-10').append("Rating: ", pokeRating);
 
+            $('.col-10').append(pokeStill);     
         }
-        event.preventDefault();
+
+        $("img").on("click", function (){
+
+            $(this).attr('src', response.data[j].images.fixed_height_small.url);
+
+            // $(this).attr('src', response.data[j].images.fixed_height_small_still.url)
+            event.preventDefault();
+        })
 
     })
 });
@@ -49,7 +61,7 @@ $(".regButton").on("click", function () {
 
     event.preventDefault();
 
-    $(".regInput").val("");
+    // $(".regButton").val("");
 });
 
 renderButtons();

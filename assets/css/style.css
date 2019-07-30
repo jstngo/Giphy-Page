@@ -1,3 +1,20 @@
 .container {
     height: 80%;
 }
+
+.col-10 {
+    height: 800px;
+    width: 90%;
+}
+
+img {
+    padding: 10px;
+}
+
+button {
+    padding: 10px;
+}
+
+.form-inline mr-auto {
+    float: right;
+}
