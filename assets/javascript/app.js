@@ -1,4 +1,4 @@
-var pokemon = ["Abra", "Bulbasaur", "Charmander", "Diglet", "Eevee", "Fennekin", "Geodude", "Hitmonlee", "Ivysaur", "Jigglypuff", "Koffee", "Lapras", "Mr. Mime", "Nidoran", "Onyx", "Pikachu", "Snorlax", "Mew", "Ditto", "Squirtle", "Dragonite", "Zapdos", "Meowth", "Psyduck", "Gengar", "Vaporeon"];
+var pokemon = ["abra", "bulbasaur", "charmander", "diglet", "eevee", "fennekin", "geodude", "hitmonlee", "ivysaur", "jigglypuff", "koffee", "lapras", "mr. mime", "nidoran", "onix", "pikachu", "snorlax", "mew", "ditto", "squirtle", "dragonite", "zapdos", "meowth", "psyduck", "gengar", "vaporeon"];
 console.log(pokemon);
 function renderButtons() {
     $('#buttons-view').empty();
@@ -21,7 +21,10 @@ $(document).on('click', 'button', function () {
 
     var u = "https://api.giphy.com/v1/gifs/search?api_key=fqydCqSaHCiqVBtd38IfSjDm4vi4vSsI&q=" + gifName + "&limit=25&offset=0&rating=PG-13&lang=en";
 
-    $('.col-10').empty();
+    
+
+    $('.col-9').empty();
+    $('.col-3').append().empty();
     
     $.ajax({
         url: u,
@@ -35,27 +38,52 @@ $(document).on('click', 'button', function () {
             // var pokeGif = $('<img>').attr('src', response.data[j].images.fixed_height_small.url);
 
             var pokeRating = $('<span>').text(response.data[j].rating);
-            
-            $('.col-10').append("Rating: ", pokeRating);
 
-            $('.col-10').append(pokeStill);     
+            $("img").on("click", function (){
+
+            $(this).attr('src', response.data[j].images.fixed_height_small_still.url).on("click", function (){
+                $(this).attr('src', response.data[j].images.fixed_height_small.url)
+            })
+
+            $(this).attr('src', response.data[j].images.fixed_height_small.url).on("click", function (){
+                $(this).attr('src', response.data[j].images.fixed_height_small_still.url);
+            })
+        })
+            $('.col-9').append("Rating: ", pokeRating);
+
+            $('.col-9').append(pokeStill);
+
         }
 
-        $("img").on("click", function (){
+        event.preventDefault();
 
-            $(this).attr('src', response.data[j].images.fixed_height_small.url);
+    })
+    var pokedex = "https://pokeapi.co/api/v2/pokemon/" + gifName +"/"
+    $.ajax({
+        url: pokedex,
+        method: 'GET'
+    }).then(function (response){
+        
+        var pName = $('<p>').text(response.forms[0].name);
+        var abilities1 = $('<p>').text(response.abilities[1].ability.name)
+        var abilities2 = $('<p>').text(response.abilities[0].ability.name);
+        var pType = $('<p>').text(response.types[0].type.name);
+        var breakline = $('<br>');
+        console.log(pName);
+        $('<form>').html('<input>');
+        $('.col-3').append("Name: ", pName, breakline);
+        $('.col-3').append("Type: ", pType, breakline);
+        $('.col-3').append("Abilities: ", abilities1, abilities2, breakline);
 
-            // $(this).attr('src', response.data[j].images.fixed_height_small_still.url)
-            event.preventDefault();
-        })
 
+        // $('.col-3').append().empty();
     })
 });
 
 // This function handles events where one button is clicked
 $(".regButton").on("click", function () {
     var v = $(".regInput").val();
-
+    // v != "Search";
     pokemon.push(v);
     createButton(v);
 
